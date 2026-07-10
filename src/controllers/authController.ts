@@ -161,6 +161,8 @@ export async function handleLogin(req: Request, res: Response): Promise<void> {
       error: 'Неверный email или пароль',
       form: { email },
       redirect: redirect || '/',
+      resetStep: null,
+      resetEmail: '',
     });
     return;
   }
@@ -172,6 +174,8 @@ export async function handleLogin(req: Request, res: Response): Promise<void> {
       error: 'Неверный email или пароль',
       form: { email },
       redirect: redirect || '/',
+      resetStep: null,
+      resetEmail: '',
     });
     return;
   }

@@ -7,8 +7,8 @@
   <%- include('../../partials/nav') %>
   <main class="container">
     <div class="card auth-card animate-in">
-      <% const isResetRequest = resetStep === 'request'; %>
-      <% const isResetVerify = resetStep === 'verify'; %>
+      <% const isResetRequest = typeof resetStep !== 'undefined' && resetStep === 'request'; %>
+      <% const isResetVerify = typeof resetStep !== 'undefined' && resetStep === 'verify'; %>
       <% const showLoginForm = !isResetRequest && !isResetVerify; %>
 
       <% if (showLoginForm) { %>
