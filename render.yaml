@@ -12,7 +12,7 @@ services:
     name: andrlol-platform
     runtime: node
     plan: free
-    buildCommand: npm install && npm run build && npx prisma db push
+    buildCommand: npm install --include=dev && npm run build && npx prisma db push
     startCommand: npm run start:prod
     healthCheckPath: /
     envVars:
