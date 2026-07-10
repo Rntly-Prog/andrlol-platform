@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container article-content">
+    <a href="/articles" style="color:var(--text-muted);font-size:0.9rem">&larr; Все статьи</a>
+    <h1 style="margin-top:1rem"><%= article.title %></h1>
+    <div class="card-meta" style="margin-bottom:1rem">
+      <span class="card-category"><%= article.category %></span>
+      <span><%= new Date(article.createdAt).toLocaleDateString('ru-RU') %></span>
+      <% if (article.isPremium) { %>
+        <span class="badge badge-premium">Premium</span>
+      <% } %>
+    </div>
+    <div class="article-body"><%= article.content %></div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

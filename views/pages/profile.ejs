@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <% if (typeof error !== 'undefined' && error) { %>
+      <%- include('../partials/flash', { message: error, type: 'error' }) %>
+    <% } %>
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <h1 class="section-title">Личный кабинет</h1>
+
+    <div class="card profile-card">
+      <div class="profile-info">
+        <div class="profile-row"><span>Имя пользователя</span><strong><%= profile.username %></strong></div>
+        <div class="profile-row"><span>Email</span><strong><%= profile.email %></strong></div>
+        <div class="profile-row">
+          <span>Статус</span>
+          <strong>
+            <% if (profile.role === 'premium') { %>
+              <span class="badge badge-premium">Премиум</span>
+            <% } else if (profile.role === 'admin') { %>
+              <span class="badge badge-admin">Администратор</span>
+            <% } else { %>
+              <span class="badge badge-free">Пользователь</span>
+            <% } %>
+          </strong>
+        </div>
+        <div class="profile-row"><span>Дата регистрации</span><strong><%= new Date(profile.createdAt).toLocaleDateString('ru-RU') %></strong></div>
+      </div>
+
+      <% if (profile.role === 'user') { %>
+        <div class="premium-offer">
+          <h3>Премиум AndrLol — <%= premium.price %> ₽</h3>
+          <p style="color:var(--text-muted);margin:0.5rem 0 1rem"><%= premium.description %></p>
+          <ul class="premium-benefits">
+            <% premium.benefits.forEach(b => { %><li><%= b %></li><% }) %>
+          </ul>
+          <form action="/premium/create" method="POST" style="margin-top:1rem">
+            <button type="submit" class="btn btn-orange">Оплатить <%= premium.price %> ₽</button>
+          </form>
+          <% if (isDev && !yukassaConfigured) { %>
+            <form action="/payments/demo" method="POST" style="margin-top:0.75rem">
+              <button type="submit" class="btn btn-outline btn-sm">Тестовая оплата (dev)</button>
+            </form>
+            <p style="color:var(--text-muted);font-size:0.8rem;margin-top:0.5rem">ЮKassa не настроена — используйте тестовую оплату</p>
+          <% } %>
+        </div>
+      <% } else if (profile.role === 'premium') { %>
+        <div class="alert alert-success">Премиум активен! <a href="/articles/premium">Перейти в премиум-раздел</a></div>
+      <% } else { %>
+        <div class="alert alert-info">Вы администратор с полным доступом.</div>
+      <% } %>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

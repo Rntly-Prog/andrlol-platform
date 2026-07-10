@@ -1,0 +1,59 @@
+{
+  "name": "andrlol-platform",
+  "version": "1.0.0",
+  "description": "Платформа AndrLol — оптимизация ПК, игры, статьи",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "prisma generate && tsc",
+    "postinstall": "prisma generate",
+    "start": "node dist/index.js",
+    "start:prod": "prisma db push && node dist/index.js",
+    "seed": "ts-node src/scripts/seed.ts",
+    "seed:prod": "node dist/scripts/seed.js",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "fix:game-images": "ts-node src/scripts/fixGameImages.ts"
+  },
+  "keywords": [
+    "express",
+    "typescript",
+    "postgresql",
+    "prisma",
+    "ejs"
+  ],
+  "author": "AndrLol",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.2.0",
+    "nodemailer": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^22.10.2",
+    "@types/nodemailer": "^8.0.1",
+    "prisma": "^6.19.3",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
+  }
+}

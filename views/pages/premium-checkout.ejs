@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <div class="card premium-checkout-card animate-in">
+      <h1>Оформление премиума</h1>
+      <p class="premium-price" style="margin:1rem 0"><%= premium.price %> <span>₽</span></p>
+      <ul class="premium-benefits">
+        <% premium.benefits.forEach(b => { %><li><%= b %></li><% }) %>
+      </ul>
+      <form action="/premium/create" method="POST" style="margin-top:1.5rem">
+        <button type="submit" class="btn btn-orange" style="width:100%">Перейти к оплате</button>
+      </form>
+      <% if (isDev && !yukassaConfigured) { %>
+        <form action="/payments/demo" method="POST" style="margin-top:0.75rem">
+          <button type="submit" class="btn btn-outline" style="width:100%">Тестовая оплата (dev)</button>
+        </form>
+      <% } %>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-top:1rem;text-align:center">Безопасная оплата через ЮKassa</p>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

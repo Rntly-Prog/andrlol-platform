@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <div class="error-page" style="padding:3rem 1rem">
+      <div style="font-size:4rem">✅</div>
+      <h1 style="margin:1rem 0">Оплата прошла успешно!</h1>
+      <p style="color:var(--text-muted);margin-bottom:2rem">Премиум-подписка за <%= premium.price %> ₽ активирована. Добро пожаловать!</p>
+      <a href="/articles/premium" class="btn btn-orange">Открыть премиум-раздел</a>
+      <a href="/profile" class="btn btn-outline" style="margin-left:0.5rem">Личный кабинет</a>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <h1 class="section-title">Профиль автора</h1>
+    <p class="section-subtitle">Изменения отображаются на странице «Об авторе» и в шапке сайта</p>
+
+    <%- include('../../partials/admin-nav') %>
+
+    <div class="admin-form">
+      <form action="/admin/author" method="POST" enctype="multipart/form-data">
+        <div class="author-edit-grid">
+          <div>
+            <div class="form-group">
+              <label>Ник / бренд</label>
+              <input type="text" name="name" class="form-control" value="<%= author.name %>" required>
+            </div>
+            <div class="form-group">
+              <label>Имя</label>
+              <input type="text" name="fullName" class="form-control" value="<%= author.fullName %>" required>
+            </div>
+            <div class="form-group">
+              <label>Возраст</label>
+              <input type="number" name="age" class="form-control" value="<%= author.age %>" min="1" max="120" required>
+            </div>
+            <div class="form-group">
+              <label>Локация</label>
+              <input type="text" name="location" class="form-control" value="<%= author.location %>" required>
+            </div>
+            <div class="form-group">
+              <label>Слоган</label>
+              <input type="text" name="tagline" class="form-control" value="<%= author.tagline %>" required>
+            </div>
+            <div class="form-group">
+              <label>Описание</label>
+              <textarea name="description" class="form-control" required><%= author.description %></textarea>
+            </div>
+            <div class="form-group">
+              <label>Опыт</label>
+              <input type="text" name="experience" class="form-control" value="<%= author.experience %>" required>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-group">
+              <label>Фото автора</label>
+              <input type="file" name="photo" class="form-control" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml">
+              <small class="form-hint">Оставьте пустым, чтобы сохранить текущее фото</small>
+              <img src="<%= author.photo %>" alt="<%= author.name %>" class="admin-author-preview">
+            </div>
+
+            <h4 class="admin-form-section">Статистика</h4>
+            <div class="form-group">
+              <label>Сборок ПК</label>
+              <input type="text" name="statsBuilds" class="form-control" value="<%= author.stats.builds %>" required>
+            </div>
+            <div class="form-group">
+              <label>Гайдов</label>
+              <input type="text" name="statsGuides" class="form-control" value="<%= author.stats.guides %>" required>
+            </div>
+            <div class="form-group">
+              <label>Игр</label>
+              <input type="text" name="statsGames" class="form-control" value="<%= author.stats.games %>" required>
+            </div>
+
+            <h4 class="admin-form-section">Контакты</h4>
+            <div class="form-group">
+              <label>Discord username</label>
+              <input type="text" name="discordUsername" class="form-control" value="<%= author.contacts.discord.username %>" required>
+            </div>
+            <div class="form-group">
+              <label>Discord сервер (URL)</label>
+              <input type="url" name="discordServer" class="form-control" value="<%= author.contacts.discord.server %>" required>
+            </div>
+            <div class="form-group">
+              <label>Telegram</label>
+              <input type="text" name="telegram" class="form-control" value="<%= author.contacts.telegram %>" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Навыки (по одному на строку)</label>
+          <textarea name="skills" class="form-control" rows="6" required><%= author.skills.join('\n') %></textarea>
+        </div>
+        <div class="form-group">
+          <label>Игры (по одной на строку)</label>
+          <textarea name="gamesList" class="form-control" rows="5" required><%= author.games.join('\n') %></textarea>
+        </div>
+        <div class="form-group">
+          <label>Услуги (по одной на строку)</label>
+          <textarea name="services" class="form-control" rows="5" required><%= author.services.join('\n') %></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить профиль</button>
+      </form>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

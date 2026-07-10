@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <h1 class="section-title">Об авторе</h1>
+
+    <div class="about-grid animate-in">
+      <div>
+        <img src="<%= author.photo %>" alt="<%= author.name %>" class="about-photo" width="280">
+        <p style="text-align:center;color:var(--text-muted);margin-top:0.75rem"><%= author.age %> лет · <%= author.location %></p>
+      </div>
+      <div>
+        <h2 style="font-size:1.8rem;margin-bottom:0.25rem"><%= author.name %> / <%= author.fullName %></h2>
+        <p style="color:var(--orange);font-weight:600;margin-bottom:1rem"><%= author.tagline %></p>
+        <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.8"><%= author.description %></p>
+
+        <div class="about-stats">
+          <div class="stat-card"><div class="stat-number"><%= author.stats.builds %></div><div class="stat-label">Сборок ПК</div></div>
+          <div class="stat-card"><div class="stat-number"><%= author.stats.guides %></div><div class="stat-label">Гайдов</div></div>
+          <div class="stat-card"><div class="stat-number"><%= author.stats.games %></div><div class="stat-label">Игр</div></div>
+        </div>
+
+        <h3 style="margin:1.5rem 0 0.75rem;color:var(--blue)">Навыки</h3>
+        <div class="tag-list">
+          <% author.skills.forEach(s => { %><span class="tag"><%= s %></span><% }) %>
+        </div>
+
+        <h3 style="margin:1.5rem 0 0.75rem;color:var(--blue)">Игры</h3>
+        <div class="tag-list">
+          <% author.games.forEach(g => { %><span class="tag tag-game"><%= g %></span><% }) %>
+        </div>
+
+        <h3 style="margin:1.5rem 0 0.75rem;color:var(--blue)">Услуги</h3>
+        <ul class="premium-benefits">
+          <% author.services.forEach(s => { %><li><%= s %></li><% }) %>
+        </ul>
+
+        <p style="color:var(--text-muted);margin-top:1rem"><strong>Опыт:</strong> <%= author.experience %></p>
+
+        <div class="about-contacts">
+          <a href="<%= author.contacts.discord.server %>" target="_blank" rel="noopener" class="contact-link">
+            <strong>Discord:</strong> <%= author.contacts.discord.username %>
+          </a>
+          <a href="https://t.me/<%= author.contacts.telegram.replace('@', '') %>" target="_blank" rel="noopener" class="contact-link">
+            <strong>Telegram:</strong> <%= author.contacts.telegram %>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <div class="card auth-card animate-in">
+      <% const isResetRequest = resetStep === 'request'; %>
+      <% const isResetVerify = resetStep === 'verify'; %>
+      <% const showLoginForm = !isResetRequest && !isResetVerify; %>
+
+      <% if (showLoginForm) { %>
+        <h1 style="text-align:center;margin-bottom:1.5rem">Вход</h1>
+      <% } else if (isResetRequest) { %>
+        <h1 style="text-align:center;margin-bottom:1.5rem">Восстановление пароля</h1>
+      <% } else { %>
+        <h1 style="text-align:center;margin-bottom:1.5rem">Новый пароль</h1>
+      <% } %>
+
+      <% if (typeof flash !== 'undefined' && flash) { %>
+        <%- include('../../partials/flash', { message: flash, type: 'success' }) %>
+      <% } %>
+
+      <% if (typeof success !== 'undefined' && success) { %>
+        <%- include('../../partials/flash', { message: success, type: 'success' }) %>
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <%- include('../../partials/flash', { message: error, type: 'error' }) %>
+      <% } %>
+
+      <% if (showLoginForm) { %>
+        <form action="/login" method="POST">
+          <input type="hidden" name="redirect" value="<%= redirect %>">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" required
+                   value="<%= typeof form !== 'undefined' && form.email ? form.email : '' %>">
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" class="form-control" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Войти</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;color:var(--text-muted)">
+          <a href="/login?reset=request">Забыли пароль?</a>
+        </p>
+        <p style="text-align:center;margin-top:0.5rem;color:var(--text-muted)">
+          Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </p>
+      <% } %>
+
+      <% if (isResetRequest) { %>
+        <p style="text-align:center;color:var(--text-muted);margin-bottom:1.5rem">
+          Введите email вашего аккаунта — мы отправим 6-значный код для восстановления
+        </p>
+        <form action="/forgot-password" method="POST">
+          <input type="hidden" name="redirect" value="<%= redirect %>">
+          <div class="form-group">
+            <label for="reset-email">Email</label>
+            <input type="email" id="reset-email" name="email" class="form-control" required
+                   value="<%= typeof form !== 'undefined' && form.email ? form.email : '' %>">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Отправить код</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;color:var(--text-muted)">
+          <a href="/login">← Вернуться ко входу</a>
+        </p>
+      <% } %>
+
+      <% if (isResetVerify) { %>
+        <p style="text-align:center;color:var(--text-muted);margin-bottom:1.5rem">
+          Введите код из письма и новый пароль для <strong><%= resetEmail %></strong>
+        </p>
+        <form action="/reset-password" method="POST">
+          <input type="hidden" name="redirect" value="<%= redirect %>">
+          <input type="hidden" name="email" value="<%= resetEmail %>">
+          <div class="form-group">
+            <label for="code">Код из письма</label>
+            <input type="text" id="code" name="code" class="form-control code-input"
+                   required pattern="\d{6}" maxlength="6" minlength="6"
+                   inputmode="numeric" autocomplete="one-time-code"
+                   placeholder="000000">
+          </div>
+          <div class="form-group">
+            <label for="new-password">Новый пароль</label>
+            <input type="password" id="new-password" name="password" class="form-control"
+                   required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="password-confirm">Подтвердите пароль</label>
+            <input type="password" id="password-confirm" name="passwordConfirm" class="form-control"
+                   required minlength="6" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Сохранить пароль</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;color:var(--text-muted)">
+          <a href="/login?reset=request">Отправить код повторно</a>
+          &middot;
+          <a href="/login">Вход</a>
+        </p>
+      <% } %>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

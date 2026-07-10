@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: andrlol
+      POSTGRES_PASSWORD: andrlol_secret
+      POSTGRES_DB: andrlol_platform
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U andrlol -d andrlol_platform']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - path: .env.docker
+        required: false
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      DATABASE_URL: postgresql://andrlol:andrlol_secret@db:5432/andrlol_platform
+      JWT_SECRET: ${JWT_SECRET:-change_me_in_production_use_long_random_string}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      YUKASSA_SHOP_ID: ${YUKASSA_SHOP_ID:-}
+      YUKASSA_SECRET_KEY: ${YUKASSA_SECRET_KEY:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-AndrLol <noreply@andrlol.ru>}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

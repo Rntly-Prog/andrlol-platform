@@ -1,0 +1,103 @@
+// Prisma-схема для PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  premium
+  admin
+}
+
+enum PaymentStatus {
+  pending
+  succeeded
+  canceled
+}
+
+model SiteSetting {
+  key   String @id
+  value Json
+
+  @@map("site_settings")
+}
+
+model User {
+  id             String          @id @default(cuid())
+  username       String          @unique
+  email          String          @unique
+  passwordHash   String          @map("password_hash")
+  role           Role            @default(user)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  payments       Payment[]
+  review         Review?
+  passwordResets PasswordReset[]
+
+  @@map("users")
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("password_resets")
+}
+
+model Article {
+  id        String   @id @default(cuid())
+  title     String
+  preview   String
+  content   String
+  category  String
+  isPremium Boolean  @default(false) @map("is_premium")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("articles")
+}
+
+model Game {
+  id              String   @id @default(cuid())
+  title           String
+  imageUrl        String   @map("image_url")
+  optimizationTip String   @map("optimization_tip")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("games")
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  userId          String        @map("user_id")
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  yookassaId      String?       @unique @map("yookassa_id")
+  amount          Int
+  currency        String        @default("RUB")
+  status          PaymentStatus @default(pending)
+  description     String        @default("Премиум-подписка AndrLol")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  completedAt     DateTime?     @map("completed_at")
+
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int
+  text      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reviews")
+}

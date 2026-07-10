@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <div class="card auth-card animate-in">
+      <h1 style="text-align:center;margin-bottom:1.5rem">Регистрация</h1>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <%- include('../../partials/flash', { message: error, type: 'error' }) %>
+      <% } %>
+
+      <form action="/register" method="POST">
+        <input type="hidden" name="redirect" value="<%= redirect %>">
+        <div class="form-group">
+          <label for="username">Имя пользователя</label>
+          <input type="text" id="username" name="username" class="form-control" required
+                 minlength="3" maxlength="30" pattern="[a-zA-Z0-9_]+"
+                 value="<%= typeof form !== 'undefined' && form.username ? form.username : '' %>">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" required
+                 value="<%= typeof form !== 'undefined' && form.email ? form.email : '' %>">
+        </div>
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <input type="password" id="password" name="password" class="form-control" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Создать аккаунт</button>
+      </form>
+      <p style="text-align:center;margin-top:1rem;color:var(--text-muted)">
+        Уже есть аккаунт? <a href="/login">Войти</a>
+      </p>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

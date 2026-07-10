@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <div class="admin-page-header">
+      <div>
+        <h1 class="section-title">Пользователи</h1>
+        <p class="section-subtitle admin-page-subtitle"><%= users.length %> <%= users.length === 1 ? 'аккаунт' : (users.length < 5 ? 'аккаунта' : 'аккаунтов') %></p>
+      </div>
+    </div>
+
+    <%- include('../../partials/admin-nav') %>
+
+    <div class="admin-user-list">
+      <% users.forEach(u => { %>
+        <article class="admin-user-card">
+          <input type="checkbox" id="edit-user-<%= u.id %>" class="admin-user-card__toggle">
+          <div class="admin-user-card__row">
+            <div class="admin-user-card__identity">
+              <div class="admin-user-card__avatar" aria-hidden="true"><%= u.username.charAt(0).toUpperCase() %></div>
+              <div class="admin-user-card__info">
+                <div class="admin-user-card__topline">
+                  <strong class="admin-user-card__name"><%= u.username %></strong>
+                  <% if (u.id === currentUserId) { %>
+                    <span class="badge badge-you">вы</span>
+                  <% } %>
+                  <% if (u.role === 'premium') { %>
+                    <span class="badge badge-premium">Premium</span>
+                  <% } else if (u.role === 'admin') { %>
+                    <span class="badge badge-admin">Admin</span>
+                  <% } else { %>
+                    <span class="badge badge-free">User</span>
+                  <% } %>
+                </div>
+                <span class="admin-user-card__email"><%= u.email %></span>
+                <span class="admin-user-card__date"><%= new Date(u.createdAt).toLocaleDateString('ru-RU') %></span>
+              </div>
+            </div>
+
+            <div class="admin-user-card__toolbar">
+              <form action="/admin/users/<%= u.id %>/role" method="POST" class="admin-user-card__role">
+                <select name="role" class="form-control form-control-sm" aria-label="Роль пользователя <%= u.username %>">
+                  <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>User</option>
+                  <option value="premium" <%= u.role === 'premium' ? 'selected' : '' %>>Premium</option>
+                  <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-primary" title="Сохранить роль">Сохранить</button>
+              </form>
+
+              <label for="edit-user-<%= u.id %>" class="btn btn-sm btn-ghost admin-user-card__edit-btn">
+                <span class="admin-user-card__edit-open">Изменить</span>
+                <span class="admin-user-card__edit-close">Скрыть</span>
+              </label>
+
+              <% if (u.id !== currentUserId) { %>
+                <form action="/admin/users/<%= u.id %>/delete" method="POST">
+                  <button type="submit" class="btn btn-sm btn-danger btn-icon" title="Удалить" onclick="return confirm('Удалить пользователя <%= u.username %>?')">✕</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="admin-user-card__panel">
+            <form action="/admin/users/<%= u.id %>" method="POST" class="admin-user-card__form">
+              <div class="admin-user-card__fields">
+                <div class="form-group">
+                  <label for="username-<%= u.id %>">Логин</label>
+                  <input type="text" id="username-<%= u.id %>" name="username" class="form-control form-control-sm" value="<%= u.username %>" required>
+                </div>
+                <div class="form-group">
+                  <label for="email-<%= u.id %>">Email</label>
+                  <input type="email" id="email-<%= u.id %>" name="email" class="form-control form-control-sm" value="<%= u.email %>" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary">Сохранить данные</button>
+            </form>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

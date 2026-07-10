@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <section class="premium-hero animate-in">
+      <span class="badge badge-premium" style="font-size:0.9rem;margin-bottom:1rem">Premium</span>
+      <h1>Премиум AndrLol</h1>
+      <p class="premium-price"><%= premium.price %> <span>₽</span></p>
+      <p style="color:var(--text-muted);max-width:560px;margin:0 auto 1.5rem"><%= premium.description %></p>
+      <% if (hasPremium) { %>
+        <a href="/articles/premium" class="btn btn-primary">Открыть премиум-раздел</a>
+      <% } else if (isAuthenticated) { %>
+        <a href="/premium/checkout" class="btn btn-orange">Оформить за <%= premium.price %> ₽</a>
+      <% } else { %>
+        <a href="/login?redirect=/premium/checkout" class="btn btn-orange">Войти и оформить</a>
+      <% } %>
+    </section>
+
+    <div class="card" style="max-width:640px;margin:0 auto 2rem">
+      <h3 style="margin-bottom:1rem;color:var(--orange)">Что входит в подписку</h3>
+      <ul class="premium-benefits">
+        <% premium.benefits.forEach(b => { %><li><%= b %></li><% }) %>
+      </ul>
+    </div>
+
+    <% if (!hasPremium) { %>
+      <p style="text-align:center;color:var(--text-muted)">Оплата через ЮKassa · Банковская карта, СБП, ЮMoney</p>
+    <% } %>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

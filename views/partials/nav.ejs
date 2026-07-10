@@ -1,0 +1,32 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="logo">Andr<span>Lol</span></a>
+    <ul class="nav-links">
+      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Главная</a></li>
+      <li><a href="/articles" class="<%= currentPath.startsWith('/articles') && currentPath !== '/articles/premium' ? 'active' : '' %>">Статьи</a></li>
+      <li><a href="/games" class="<%= currentPath.startsWith('/games') ? 'active' : '' %>">Игры</a></li>
+      <li><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">Об авторе</a></li>
+      <li><a href="/premium" class="<%= currentPath.startsWith('/premium') ? 'active' : '' %>">Премиум</a></li>
+      <% if (isAuthenticated && (user.role === 'premium' || user.role === 'admin')) { %>
+        <li><a href="/articles/premium" class="<%= currentPath === '/articles/premium' ? 'active' : '' %>">Материалы</a></li>
+      <% } %>
+      <% if (isAuthenticated && user.role === 'admin') { %>
+        <li><a href="/admin" class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>">Админ</a></li>
+      <% } %>
+    </ul>
+    <div class="nav-user">
+      <% if (isAuthenticated) { %>
+        <% if (user.role === 'premium') { %>
+          <span class="badge badge-premium">Premium</span>
+        <% } else if (user.role === 'admin') { %>
+          <span class="badge badge-admin">Admin</span>
+        <% } %>
+        <a href="/profile" class="btn btn-sm btn-outline"><%= user.username %></a>
+        <a href="/logout" class="btn btn-sm btn-outline">Выход</a>
+      <% } else { %>
+        <a href="/login" class="btn btn-sm btn-outline">Вход</a>
+        <a href="/register" class="btn btn-sm btn-primary">Регистрация</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

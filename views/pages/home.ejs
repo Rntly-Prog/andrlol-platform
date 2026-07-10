@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <section class="hero animate-in">
+      <h1>Оптимизация ПК &amp; Игры</h1>
+      <p>Гайды по настройке Windows, сборке компьютеров, разгону видеокарт и оптимизации любимых игр от <%= author.fullName %>.</p>
+      <div class="hero-actions">
+        <a href="/articles" class="btn btn-primary">Читать статьи</a>
+        <a href="/games" class="btn btn-orange">Советы по играм</a>
+      </div>
+    </section>
+
+    <!-- Слайдер контактов -->
+    <section class="home-section animate-in animate-delay-1">
+      <h2 class="section-title">Связаться со мной</h2>
+      <p class="section-subtitle">Выберите удобный способ — отвечаю быстро</p>
+
+      <div class="slider" data-slider>
+        <div class="slider__viewport">
+          <div class="slider__track">
+            <article class="slider__slide contact-slide contact-slide--discord">
+              <div class="contact-slide__icon">💬</div>
+              <h3>Discord</h3>
+              <p>Сервер и личные сообщения — гайды, помощь с оптимизацией и сборкой ПК</p>
+              <p class="contact-slide__handle"><%= author.contacts.discord.username %></p>
+              <a href="<%= author.contacts.discord.server %>" target="_blank" rel="noopener" class="btn btn-primary">Открыть Discord</a>
+            </article>
+
+            <article class="slider__slide contact-slide contact-slide--telegram">
+              <div class="contact-slide__icon">✈️</div>
+              <h3>Telegram</h3>
+              <p>Быстрые вопросы, консультации и связь по заказам оптимизации</p>
+              <p class="contact-slide__handle"><%= author.contacts.telegram %></p>
+              <a href="https://t.me/<%= author.contacts.telegram.replace('@', '') %>" target="_blank" rel="noopener" class="btn btn-orange">Написать в Telegram</a>
+            </article>
+
+            <article class="slider__slide contact-slide contact-slide--premium">
+              <div class="contact-slide__icon">⭐</div>
+              <h3>Премиум-подписка</h3>
+              <p>Эксклюзивные гайды, конфиги и материалы для максимального FPS</p>
+              <p class="contact-slide__handle"><%= premium.price %> ₽ · <%= premiumCount %>+ материалов</p>
+              <a href="/premium" class="btn btn-orange">Узнать о подписке</a>
+            </article>
+
+            <article class="slider__slide contact-slide contact-slide--about">
+              <div class="contact-slide__icon">🎮</div>
+              <h3>Об авторе</h3>
+              <p><%= author.tagline %></p>
+              <p class="contact-slide__handle"><%= author.experience %></p>
+              <a href="/about" class="btn btn-outline">Подробнее об Авторе</a>
+            </article>
+          </div>
+        </div>
+        <button type="button" class="slider__prev" aria-label="Предыдущий слайд">‹</button>
+        <button type="button" class="slider__next" aria-label="Следующий слайд">›</button>
+        <div class="slider__dots"></div>
+      </div>
+    </section>
+
+    <% if (latestArticles && latestArticles.length) { %>
+      <h2 class="section-title animate-in animate-delay-1">Последние статьи</h2>
+      <p class="section-subtitle animate-in animate-delay-1">Свежие материалы по оптимизации</p>
+      <div class="card-grid">
+        <% latestArticles.forEach((article, i) => { %>
+          <a href="/articles/<%= article.id %>" class="card animate-in animate-delay-<%= Math.min(i + 2, 3) %>" style="text-decoration:none;color:inherit">
+            <h3><%= article.title %></h3>
+            <p><%= article.preview %></p>
+            <div class="card-meta">
+              <span class="card-category"><%= article.category %></span>
+              <% if (article.isPremium) { %>
+                <span class="badge badge-premium">Premium</span>
+              <% } %>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- Отзывы -->
+    <section id="reviews" class="home-section animate-in animate-delay-2">
+      <div class="reviews-header">
+        <div>
+          <h2 class="section-title">Отзывы</h2>
+          <p class="section-subtitle home-section-subtitle">Что говорят пользователи платформы</p>
+        </div>
+        <% if (reviewStats.count > 0) { %>
+          <div class="reviews-summary">
+            <span class="reviews-summary__score"><%= reviewStats.average %></span>
+            <%- include('../partials/stars', { rating: reviewStats.average }) %>
+            <span class="reviews-summary__count"><%= reviewStats.count %> <%= reviewStats.count === 1 ? 'отзыв' : (reviewStats.count < 5 ? 'отзыва' : 'отзывов') %></span>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="reviews-layout">
+        <div class="reviews-main">
+          <% if (reviews.length) { %>
+            <div class="slider slider--reviews" data-slider>
+              <div class="slider__viewport">
+                <div class="slider__track">
+                  <% reviews.forEach((review) => { %>
+                    <article class="slider__slide review-slide">
+                      <div class="review-slide__top">
+                        <div class="review-slide__avatar"><%= review.user.username.charAt(0).toUpperCase() %></div>
+                        <div>
+                          <strong><%= review.user.username %></strong>
+                          <% if (review.user.role === 'premium') { %>
+                            <span class="badge badge-premium">Premium</span>
+                          <% } else if (review.user.role === 'admin') { %>
+                            <span class="badge badge-admin">Admin</span>
+                          <% } %>
+                          <div class="review-slide__date"><%= new Date(review.createdAt).toLocaleDateString('ru-RU') %></div>
+                        </div>
+                        <%- include('../partials/stars', { rating: review.rating }) %>
+                      </div>
+                      <p class="review-slide__text">«<%= review.text %>»</p>
+                    </article>
+                  <% }) %>
+                </div>
+              </div>
+              <% if (reviews.length > 1) { %>
+                <button type="button" class="slider__prev" aria-label="Предыдущий отзыв">‹</button>
+                <button type="button" class="slider__next" aria-label="Следующий отзыв">›</button>
+                <div class="slider__dots"></div>
+              <% } %>
+            </div>
+          <% } else { %>
+            <div class="card reviews-empty">
+              <p>Пока нет отзывов — будьте первым!</p>
+            </div>
+          <% } %>
+        </div>
+
+        <aside class="review-form-card card">
+          <h3><%= userReview ? 'Изменить отзыв' : 'Оставить отзыв' %></h3>
+          <% if (isAuthenticated) { %>
+            <form action="/reviews" method="POST" data-star-form>
+              <div class="form-group">
+                <label>Ваша оценка</label>
+                <div class="star-input">
+                  <% for (let s = 5; s >= 1; s--) { %>
+                    <input type="radio" name="rating" id="rating-<%= s %>" value="<%= s %>" <%= userReview && userReview.rating === s ? 'checked' : (!userReview && s === 5 ? 'checked' : '') %> required>
+                    <label for="rating-<%= s %>" data-star="<%= s %>" class="<%= userReview && s <= userReview.rating ? 'is-active' : (!userReview && s <= 5 ? 'is-active' : '') %>">★</label>
+                  <% } %>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="review-text">Текст отзыва</label>
+                <textarea id="review-text" name="text" class="form-control" rows="4" minlength="10" maxlength="1000" required placeholder="Расскажите, чем помогли гайды или консультации..."><%= userReview ? userReview.text : '' %></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block"><%= userReview ? 'Сохранить отзыв' : 'Отправить отзыв' %></button>
+            </form>
+            <% if (userReview) { %>
+              <form action="/reviews/delete" method="POST" style="margin-top:0.75rem">
+                <button type="submit" class="btn btn-sm btn-ghost btn-block" onclick="return confirm('Удалить свой отзыв?')">Удалить отзыв</button>
+              </form>
+            <% } %>
+          <% } else { %>
+            <p class="review-form-guest">Войдите или зарегистрируйтесь, чтобы оставить отзыв и оценку.</p>
+            <div class="review-form-actions">
+              <a href="/login?redirect=/#reviews" class="btn btn-primary">Войти</a>
+              <a href="/register?redirect=/#reviews" class="btn btn-outline">Регистрация</a>
+            </div>
+          <% } %>
+        </aside>
+      </div>
+    </section>
+
+    <section class="premium-hero animate-in animate-delay-2" style="margin-top:3rem;padding:2rem">
+      <h2 style="font-size:1.5rem;margin-bottom:0.5rem">Премиум — <%= premium.price %> ₽</h2>
+      <p style="color:var(--text-muted);margin-bottom:1rem"><%= premiumCount %>+ эксклюзивных гайдов и конфигов</p>
+      <a href="/premium" class="btn btn-orange">Узнать о подписке</a>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>
+  <script src="/js/slider.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <h1 class="section-title">Управление играми</h1>
+
+    <%- include('../../partials/admin-nav') %>
+
+    <div class="admin-form">
+      <h3>+ Новая игра</h3>
+      <form action="/admin/games" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" name="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Изображение</label>
+          <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" required>
+          <small class="form-hint">JPG, PNG, WebP, GIF или SVG, до 5 МБ</small>
+        </div>
+        <div class="form-group">
+          <label>Совет по оптимизации</label>
+          <textarea name="optimizationTip" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+      </form>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Игра</th>
+          <th>Изображение</th>
+          <th>Совет</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% games.forEach(game => { %>
+          <tr>
+            <td><%= game.title %></td>
+            <td>
+              <img src="<%= game.imageUrl %>" alt="<%= game.title %>" class="admin-game-thumb">
+            </td>
+            <td style="max-width:400px"><%= game.optimizationTip.substring(0, 80) %>...</td>
+            <td>
+              <details>
+                <summary class="btn btn-sm btn-outline" style="cursor:pointer">Редактировать</summary>
+                <form action="/admin/games/<%= game.id %>" method="POST" enctype="multipart/form-data" class="admin-inline-form">
+                  <div class="form-group">
+                    <label>Название</label>
+                    <input type="text" name="title" class="form-control" value="<%= game.title %>" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Новое изображение</label>
+                    <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml">
+                    <small class="form-hint">Оставьте пустым, чтобы сохранить текущее</small>
+                    <img src="<%= game.imageUrl %>" alt="<%= game.title %>" class="admin-game-preview">
+                  </div>
+                  <div class="form-group">
+                    <label>Совет по оптимизации</label>
+                    <textarea name="optimizationTip" class="form-control" required><%= game.optimizationTip %></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                </form>
+              </details>
+              <form action="/admin/games/<%= game.id %>/delete" method="POST" style="display:inline;margin-left:0.5rem">
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Удалить игру?')">Удалить</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

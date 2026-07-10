@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <h1 class="section-title">🌟 Премиум-раздел</h1>
+    <p class="section-subtitle"><%= totalCount %> эксклюзивных материалов для подписчиков</p>
+
+    <% categories.forEach(cat => { %>
+      <h2 style="margin:2rem 0 1rem;color:var(--blue);font-size:1.3rem"><%= cat.name %> <span style="color:var(--text-muted);font-size:0.9rem">(<%= cat.articles.length %>)</span></h2>
+      <div class="card-grid">
+        <% cat.articles.forEach(article => { %>
+          <a href="/articles/<%= article.id %>" class="card" style="text-decoration:none;color:inherit">
+            <h3><%= article.title %></h3>
+            <p><%= article.preview %></p>
+            <div class="card-meta">
+              <span class="badge badge-premium">Premium</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% }) %>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

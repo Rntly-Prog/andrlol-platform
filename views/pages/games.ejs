@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <main class="container">
+    <h1 class="section-title">Игры</h1>
+    <p class="section-subtitle">Советы по оптимизации для ваших любимых игр</p>
+
+    <div class="card-grid">
+      <% if (games.length === 0) { %>
+        <p style="color:var(--text-muted)">Список игр пока пуст.</p>
+      <% } %>
+      <% games.forEach((game, i) => { %>
+        <div class="card game-card animate-in" style="animation-delay:<%= i * 0.1 %>s">
+          <img src="<%= game.imageUrl %>" alt="<%= game.title %>" loading="lazy">
+          <div class="game-card-body">
+            <h3><%= game.title %></h3>
+            <p><%= game.optimizationTip %></p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

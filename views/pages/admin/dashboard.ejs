@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <%- include('../../partials/flash', { message: flash, type: 'success' }) %>
+    <% } %>
+
+    <h1 class="section-title">Админ-панель</h1>
+
+    <%- include('../../partials/admin-nav') %>
+
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="stat-number"><%= stats.usersCount %></div>
+        <div class="stat-label">Пользователей</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><%= stats.articlesCount %></div>
+        <div class="stat-label">Статей</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number"><%= stats.gamesCount %></div>
+        <div class="stat-label">Игр</div>
+      </div>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>

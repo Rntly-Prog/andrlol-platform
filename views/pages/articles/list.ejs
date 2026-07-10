@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <%- include('../../partials/head') %>
+</head>
+<body>
+  <%- include('../../partials/nav') %>
+  <main class="container">
+    <h1 class="section-title">Статьи</h1>
+    <p class="section-subtitle">Гайды по оптимизации ПК и игр. Статьи с меткой Premium доступны подписчикам.</p>
+
+    <div class="card-grid">
+      <% if (articles.length === 0) { %>
+        <p style="color:var(--text-muted)">Статей пока нет. Загляните позже!</p>
+      <% } %>
+      <% articles.forEach((article, i) => { %>
+        <a href="/articles/<%= article.id %>" class="card animate-in" style="text-decoration:none;color:inherit;animation-delay:<%= i * 0.1 %>s">
+          <h3><%= article.title %></h3>
+          <p><%= article.preview %></p>
+          <div class="card-meta">
+            <span class="card-category"><%= article.category %></span>
+            <span><%= new Date(article.createdAt).toLocaleDateString('ru-RU') %></span>
+            <% if (article.isPremium) { %>
+              <% if (canReadPremium) { %>
+                <span class="badge badge-premium">Premium ✓</span>
+              <% } else { %>
+                <span class="badge badge-premium">🔒 Premium</span>
+              <% } %>
+            <% } %>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </main>
+  <%- include('../../partials/footer') %>
+</body>
+</html>
